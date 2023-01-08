@@ -21,14 +21,13 @@ public class DomTest {
     private static final Logger log = Logger.getLogger(String.valueOf(DomTest.class));
     private final String login = "wasej93407@dni8.com";
     private final String pas = "Natalia12345!";
-    protected static WebDriver driver;
+    private WebDriver driver;
     ChromeOptions options = new ChromeOptions();
 
 
     @BeforeAll
     public static void setUp(){
         WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
     }
 
 
@@ -38,7 +37,7 @@ public class DomTest {
         driver = new ChromeDriver(options);
         driver.get("https://duckduckgo.com/");
         driver.findElement(By.id("search_form_input_homepage")).sendKeys("ОТУС", Keys.ENTER);
-        String element = driver.findElement(By.xpath("//*[@id=\"r1-0\"]/div[2]/h2/a/span")).getText();
+        String element = driver.findElement(By.xpath("(//*[@data-testid='result-title-a'])[1]")).getText();
         Assertions.assertEquals("Онлайн‑курсы для профессионалов, дистанционное обучение современным ...", element);
 
     }
@@ -58,6 +57,7 @@ public class DomTest {
 
     @Test
     public void maximizeTest(){
+        driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.get("https://otus.ru");
         loginInOtus();
@@ -72,8 +72,8 @@ public class DomTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        clearAndEnter(By.xpath("//input[@type='text' and contains (@placeholder, 'Электронная почта')]"), login);
-        clearAndEnter(By.xpath("//input[@type='password' and contains (@placeholder, 'Введите пароль')]"), pas);
+        clearAndEnter(By.xpath("//*[@class='new-log-reg__form js-login']/descendant::*[@placeholder='Электронная почта']"), login);
+        clearAndEnter(By.xpath("//*[@class='new-log-reg__form js-login']/descendant::*[@placeholder='Введите пароль']"), pas);
         driver.findElement(By.xpath("//*[normalize-space(text()) = 'Войти' and @type='submit']")).submit();
      }
 
